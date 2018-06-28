@@ -10,7 +10,7 @@ const Profile = require('../../models/Profile');
 //Validation
 const validatePostInput = require('../../validations/post');
 
-// @route :  POST api/posts
+// @route :  GET api/posts
 // @desc  :  Get posts
 // @access:  Public
 router.get('/', (req, res) => {
@@ -145,7 +145,7 @@ router.post('/comment/:id', passport.authenticate('jwt', {session: false}), (req
          name: req.user.name,
          avatar: req.user.avatar,
          user: req.user.id
-       }
+       };
 
        // Add to comments array
        post.comments.unshift(newComment);
@@ -162,6 +162,11 @@ router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', {session:
 
   Post.findById(req.params.id)
      .then(post => {
+       //Check for post owner
+       if (post.user.toString() !== req.user.id) {
+         return res.status(401).json({ notauthorized: 'User not authorized'});
+       }
+
        // Check to see if comment exist
        if (post.comments.filter(comment => comment.id.toString() === req.params.comment_id).length === 0) {
          return res.status(404).json({commentnotexist: 'Comment does not exist'});
