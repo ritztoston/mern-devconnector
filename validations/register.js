@@ -19,10 +19,6 @@ const validateRegisterInput = (data) => {
   if (Validator.isEmpty(data.name)) {
     errors.name = 'Name field is required';
   }
-  if (Validator.isEmpty(data.email)) {
-    errors.email = 'Email field is required';
-
-  }
   if (Validator.isEmpty(data.password)) {
     errors.password = 'Password field is required';
   }
@@ -34,7 +30,9 @@ const validateRegisterInput = (data) => {
   }
   if (!Validator.isEmail(data.email)) {
     errors.email = 'Email is invalid';
-
+  }
+  if (Validator.isEmpty(data.email)) {
+    errors.email = 'Email field is required';
   }
 
 
