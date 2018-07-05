@@ -28,12 +28,12 @@ const validateProfileInput = (data) => {
     }
   }
   if (!isEmpty(data.facebook)) {
-    if (!Validator.isURL(data.website)){
+    if (!Validator.isURL(data.facebook)){
       errors.facebook = 'Not a valid URL';
     }
   }
   if (!isEmpty(data.twitter)) {
-    if (!Validator.isURL(data.website)){
+    if (!Validator.isURL(data.twitter)){
       errors.twitter = 'Not a valid URL';
     }
   }

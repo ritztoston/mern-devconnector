@@ -97,11 +97,11 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   const profileFields = {};
   profileFields.user = req.user.id;
   if (req.body.handle) profileFields.handle = req.body.handle;
-  if (req.body.company) profileFields.company = req.body.company;
-  if (req.body.website) profileFields.website = req.body.website;
-  if (req.body.location) profileFields.location = req.body.location;
-  if (req.body.status) profileFields.status = req.body.status;
-  if (req.body.bio) profileFields.bio = req.body.bio;
+  profileFields.company = req.body.company;
+  profileFields.website = req.body.website;
+  profileFields.location = req.body.location;
+  profileFields.status = req.body.status;
+  profileFields.bio = req.body.bio;
 
   // Skills
   if (typeof req.body.skills !== 'undefined') {
@@ -110,8 +110,8 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 
   //Social
   profileFields.social = {};
-  if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
-  if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
+  profileFields.social.facebook = req.body.facebook;
+  profileFields.social.twitter = req.body.twitter;
 
   Profile.findOne({user: req.user.id})
      .then(profile => {
