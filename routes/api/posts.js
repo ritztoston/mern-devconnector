@@ -71,9 +71,9 @@ router.delete('/:id', passport.authenticate('jwt', {session: false}), (req, res)
                .then(() => {
                  res.json({success: true});
                })
-               .catch(err => res.status(404).json({postnotfound: 'Post not found'}));
+               .catch(err => res.status(404).json({postnotfound: 'post not found'}));
           })
-          .catch(err => res.status(404).json({postnotfound: 'Post not found'}));
+          .catch(err => res.status(404).json({postnotfound: 'post not found'}));
      });
 });
 
@@ -95,7 +95,7 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, r
             post.save()
                .then(post => res.json(post));
           })
-          .catch(err => res.status(404).json({postnotfound: 'Post not found'}));
+          .catch(err => res.status(404).json({postnotfound: 'post not found'}));
      });
 });
 
@@ -122,7 +122,7 @@ router.post('/unlike/:id', passport.authenticate('jwt', {session: false}), (req,
             // Save
             post.save().then(post => res.json(post));
           })
-          .catch(err => res.status(404).json({postnotfound: 'Post not found'}));
+          .catch(err => res.status(404).json({postnotfound: 'post not found'}));
      });
 });
 

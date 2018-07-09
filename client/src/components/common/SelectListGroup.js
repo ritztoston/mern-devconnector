@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const SelectListGroup = ({
                            name,
-   placeholder,
+                           placeholder,
                            value,
                            error,
                            info,
