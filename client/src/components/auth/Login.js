@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {loginUser} from "../../actions/authActions";
 import TextFieldGroup from '../common/TextFieldGroup';
+import SubmitButton from "../common/SubmitButton";
 
 class Login extends Component {
   constructor () {
@@ -10,6 +11,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      disabled: false,
       errors: {}
     };
     this.onChange = this.onChange.bind(this);
@@ -25,6 +27,12 @@ class Login extends Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
+    }
+
+    if(nextProps.auth.loading) {
+      this.setState({disabled: !this.state.disabled});
+    } else {
+      this.setState({disabled: this.state.disabled});
     }
 
     if(nextProps.errors) {
@@ -48,7 +56,8 @@ class Login extends Component {
 
   render () {
 
-    const {errors} = this.state;
+    const {errors, disabled} = this.state;
+    const {loading} = this.props.auth;
 
     return (
        <div className="login">
@@ -73,8 +82,9 @@ class Login extends Component {
                     value={this.state.password}
                     onChange={this.onChange}
                     error={errors.password}
+                    autocomplete="off"
                  />
-                 <input type="submit" className="btn btn-info btn-block mt-4"/>
+                 <SubmitButton disabled={disabled} type="submit" loading={loading}/>
                </form>
              </div>
            </div>

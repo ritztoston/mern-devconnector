@@ -21,7 +21,7 @@ class Post extends Component {
     } else {
       postContent = (
          <div>
-           <PostItem post={post} showActions={false}/>
+           <PostItem post={post} showActions={true}/>
          </div>
       );
     }

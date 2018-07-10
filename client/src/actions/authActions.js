@@ -1,4 +1,4 @@
-import {GET_ERRORS, SET_CURRENT_USER} from "./types";
+import {GET_ERRORS, LOGIN_LOADING, LOGIN_UNLOADING, SET_CURRENT_USER} from "./types";
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
@@ -21,6 +21,7 @@ export const registerUser = (userData, history) => dispatch => {
 
 // Login Get user token
 export const loginUser = (userData) => dispatch => {
+  dispatch(setLoginLoading());
   axios.post('/api/users/login' ,userData)
      .then(res => {
        // Save to localStorage
@@ -34,10 +35,32 @@ export const loginUser = (userData) => dispatch => {
        // Set current user
        dispatch(setCurrentUser(decoded))
      })
-     .catch(err => dispatch({
-       type: GET_ERRORS,
-       payload: err.response.data
-     }));
+     .catch(err => dispatch(setLoginError(err)));
+};
+
+// Login loading
+export const setLoginLoading = () => {
+  return {
+    type: LOGIN_LOADING
+  }
+};
+// TEST
+export const setLoginError = (err) => dispatch => {
+  dispatch(getErrors(err));
+  dispatch(stopLoginLoading());
+};
+// Get errors
+export const getErrors = (err) => {
+  return {
+    type: GET_ERRORS,
+    payload: err.response.data
+  }
+};
+// stop login loading due to error
+export const stopLoginLoading = () => {
+  return {
+    type: LOGIN_UNLOADING
+  }
 };
 
 // Set logged in user

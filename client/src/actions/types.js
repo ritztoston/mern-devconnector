@@ -1,5 +1,7 @@
 export const GET_ERRORS = 'GET_ERRORS';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const LOGIN_LOADING = 'LOGIN_LOADING';
+export const LOGIN_UNLOADING = 'LOGIN_UNLOADING';
 
 // Profiles
 export const GET_PROFILE = 'GET_PROFILE';

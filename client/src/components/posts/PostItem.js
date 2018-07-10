@@ -26,16 +26,14 @@ class PostItem extends Component {
 
   render () {
 
-    const {post, auth, showActions, profile} = this.props;
-
-    // console.log(profile);
+    const {post, auth, showActions, handle} = this.props;
 
 
     return (
        <div className="card card-body mb-2">
          <div className="row">
            <div className="col-md-2">
-             <Link to={`/profile/profile`}>
+             <Link to={`/profile/${handle}`}>
                <img className="rounded-circle d-none d-md-block"
                     src={post.avatar}
                     alt=""/>
@@ -77,7 +75,7 @@ PostItem.defaultProps = {
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  profile: PropTypes.array.isRequired,
+  handle: PropTypes.string.isRequired,
   deletePost: PropTypes.func.isRequired,
   addLike: PropTypes.func.isRequired,
   removeLike: PropTypes.func.isRequired,

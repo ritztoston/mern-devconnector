@@ -4,34 +4,46 @@ import {connect} from 'react-redux';
 import PostForm from './PostForm';
 import Spinner from '../common/Spinner';
 import {getPosts} from "../../actions/postActions";
-import {getProfiles} from '../../actions/profileActions';
 import PostFeed from './PostFeed';
+import {getCurrentProfile, getProfiles} from '../../actions/profileActions';
+import {withRouter} from 'react-router-dom';
 
 class Posts extends Component {
   componentDidMount() {
     this.props.getPosts();
+    this.props.getCurrentProfile();
     this.props.getProfiles();
   }
 
   render () {
 
     const {posts, loading} = this.props.post;
-    const {profiles} = this.props.profile;
+    const {profile, profiles} = this.props.profile;
 
     let postContent;
+    let postForm;
 
-    if(posts === null || loading || profiles === null) {
+    if(posts === null || loading || profile === null || profiles === null) {
       postContent = <Spinner/>
     } else {
-      postContent = <PostFeed posts={posts} profiles={profiles}/>
+      if (Object.keys(profile).length > 0) {
+        postForm = <PostForm/>;
+        postContent = <PostFeed posts={posts} profiles={profiles}/>;
+      }
+      else {
+        this.props.history.push('/dashboard');
+      }
     }
+
+
+
 
     return (
        <div className="feed">
          <div className="container">
            <div className="row">
              <div className="col-md-12">
-               <PostForm/>
+               {postForm}
                {postContent}
              </div>
            </div>
@@ -42,9 +54,11 @@ class Posts extends Component {
 }
 
 Posts.propTypes = {
-  getPosts: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
   getProfiles: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  getPosts: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -52,4 +66,4 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, {getPosts, getProfiles})(Posts);
+export default connect(mapStateToProps, {getPosts, getCurrentProfile, getProfiles})(withRouter(Posts));
