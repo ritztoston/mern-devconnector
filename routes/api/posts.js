@@ -15,6 +15,7 @@ const validatePostInput = require('../../validations/post');
 // @access:  Public
 router.get('/', (req, res) => {
   Post.find()
+     .populate('user', ['handle', 'avatar'])
      .sort({date: -1})
      .then(posts => res.json(posts))
      .catch(err => res.status(404).json({nopostfound: 'No posts found'}));

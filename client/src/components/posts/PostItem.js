@@ -4,22 +4,8 @@ import {connect} from 'react-redux';
 import classnames from 'classnames';
 import {Link} from 'react-router-dom';
 import {deletePost, addLike, removeLike} from "../../actions/postActions";
-import {getUser} from "../../actions/profileActions";
-import axios from "axios/index";
-class PostItem extends Component {
-  constructor (props){
-    super(props);
-    this.state = {
-      handle: ''
-    }
-  }
 
-  componentWillMount() {
-    axios.get(`/api/users/${this.props.post.user}`)
-       .then(user => this.setState({handle: user.data.handle}))
-       .catch(() => this.setState({handle: 'noHandle'}));
-    console.log(this.state.handle);
-  }
+class PostItem extends Component {
 
   onDeleteClick(id) {
     this.props.deletePost(id);
@@ -42,24 +28,13 @@ class PostItem extends Component {
 
   render () {
 
-    const {post, auth, showActions, user} = this.props;
-    if(this.state.handle.length === 0) {
-      console.log('loading...');
-    }
-
-    //const test = getUser(post.user);
-    //console.log(test);
-    // console.log(getUser(post.user));
-    // console.log(post.user.name);
-    // this.props.getUser(post.user);
-    //console.log(post.user);
-    //this.updateHandle(post.user);
+    const {post, auth, showActions} = this.props;
 
     return (
        <div className="card card-body mb-2">
          <div className="row">
            <div className="col-md-2">
-             <Link to={`/profile/profile`}>
+             <Link to={`/profile/${post.user.handle}`}>
                <img className="rounded-circle d-none d-md-block"
                     src={post.avatar}
                     alt=""/>
@@ -79,7 +54,7 @@ class PostItem extends Component {
              <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
                Comments
              </Link>
-               {post.user === auth.user.id ? (
+               {post.user._id === auth.user.id ? (
                   <button onClick={this.onDeleteClick.bind(this, post._id)}
                           type="button"
                           className="btn btn-danger mr-1">
@@ -108,7 +83,6 @@ PostItem.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  user: state.profile.user
 });
 
 export default connect(mapStateToProps, {deletePost, addLike, removeLike})(PostItem);

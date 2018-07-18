@@ -44,7 +44,7 @@ export const setLoginLoading = () => {
     type: LOGIN_LOADING
   }
 };
-// TEST
+// Set Login Error
 export const setLoginError = (err) => dispatch => {
   dispatch(getErrors(err));
   dispatch(stopLoginLoading());
