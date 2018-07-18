@@ -1,5 +1,13 @@
 import axios from 'axios';
-import {GET_PROFILE, GET_PROFILES, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_ERRORS, SET_CURRENT_USER} from "./types";
+import {
+  GET_PROFILE,
+  GET_PROFILES,
+  PROFILE_LOADING,
+  CLEAR_CURRENT_PROFILE,
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  GET_USER
+} from "./types";
 // import {browserHistory} from 'react-router-dom';
 
 // Get current profile
@@ -121,7 +129,23 @@ export const deleteAccount = () => dispatch => {
        );
   }
 };
-
+// Get user
+// export const getUser = (userId) => dispatch => {
+//   axios.get(`/api/users/${userId}`)
+//      .then(res => dispatch({
+//        type: GET_USER,
+//        payload: res.data
+//      }))
+//      .catch(err => dispatch({
+//        type: GET_USER,
+//        payload: null
+//      }))
+// };
+export const getUser = (userId) => {
+  axios.get(`/api/users/${userId}`)
+     .then(res => res.data)
+     .catch(err => err.response.data)
+};
 // Get all profiles
 export const getProfiles = () => dispatch => {
   dispatch(setProfileLoading());

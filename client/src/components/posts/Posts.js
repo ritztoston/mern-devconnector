@@ -5,30 +5,29 @@ import PostForm from './PostForm';
 import Spinner from '../common/Spinner';
 import {getPosts} from "../../actions/postActions";
 import PostFeed from './PostFeed';
-import {getCurrentProfile, getProfiles} from '../../actions/profileActions';
+import {getCurrentProfile} from '../../actions/profileActions';
 import {withRouter} from 'react-router-dom';
 
 class Posts extends Component {
   componentDidMount() {
     this.props.getPosts();
     this.props.getCurrentProfile();
-    this.props.getProfiles();
   }
 
   render () {
 
     const {posts, loading} = this.props.post;
-    const {profile, profiles} = this.props.profile;
+    const {profile} = this.props.profile;
 
     let postContent;
     let postForm;
 
-    if(posts === null || loading || profile === null || profiles === null) {
+    if(posts === null || loading || profile === null) {
       postContent = <Spinner/>
     } else {
       if (Object.keys(profile).length > 0) {
         postForm = <PostForm/>;
-        postContent = <PostFeed posts={posts} profiles={profiles}/>;
+        postContent = <PostFeed posts={posts}/>;
       }
       else {
         this.props.history.push('/dashboard');
@@ -55,7 +54,6 @@ class Posts extends Component {
 
 Posts.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
-  getProfiles: PropTypes.func.isRequired,
   getPosts: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
@@ -66,4 +64,4 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, {getPosts, getCurrentProfile, getProfiles})(withRouter(Posts));
+export default connect(mapStateToProps, {getPosts, getCurrentProfile})(withRouter(Posts));

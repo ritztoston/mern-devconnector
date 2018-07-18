@@ -20,6 +20,11 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  handle: {
+    type: String,
+    required: true,
+    max: 40
   }
 });
 

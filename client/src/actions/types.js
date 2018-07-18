@@ -4,6 +4,7 @@ export const LOGIN_LOADING = 'LOGIN_LOADING';
 export const LOGIN_UNLOADING = 'LOGIN_UNLOADING';
 
 // Profiles
+export const GET_USER = 'GET_USER';
 export const GET_PROFILE = 'GET_PROFILE';
 export const GET_PROFILES = 'GET_PROFILES';
 export const PROFILE_LOADING = 'PROFILE_LOADING';

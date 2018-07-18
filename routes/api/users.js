@@ -42,11 +42,16 @@ router.post('/register', (req, res) => {
            r: 'pg', //RATING
            d: 'mm'  //DEFAULT ICON
          });
+
+         const rawHandle = req.body.name.trim().split(' ');
+         const handle = rawHandle.join("");
+
          const newUser = new User({
            name: req.body.name,
            email: req.body.email,
            avatar,
-           password: req.body.password
+           password: req.body.password,
+           handle: handle.toLowerCase()
          });
 
          bcrypt.genSalt(10, (err, salt) => {
@@ -96,7 +101,8 @@ router.post('/login', (req, res) => {
               const payload = {
                 id: user.id,
                 name: user.name,
-                avatar: user.avatar
+                avatar: user.avatar,
+                handle: user.handle
               };
 
               // Sign Token
@@ -129,5 +135,17 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
     email: req.user.email
   });
 });
+
+// @route :  GET api/posts/user/:userId
+// @desc  :  Return current user
+// @access:  Private
+router.get('/:userId', (req, res) => {
+  User.findById(req.params.userId)
+     .then(user => res.json(user))
+     .catch(err => res.status(404).json({nouserfound: 'No user found with that ID'}));
+});
+
+
+
 
 module.exports = router;
