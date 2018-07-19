@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -10,7 +10,7 @@ class Navbar extends Component {
   onLogoutLink (e) {
     e.preventDefault();
     this.props.clearCurrentProfile();
-    this.props.logoutUser();
+    this.props.logoutUser(this.props.history);
   }
 
 
@@ -53,7 +53,7 @@ class Navbar extends Component {
     return (
        <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
          <div className="container">
-           <Link className="navbar-brand" to="/">DevConnector</Link>
+           <Link className="navbar-brand" to="/">SalesRobot</Link>
            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
              <span className="navbar-toggler-icon"> </span>
            </button>
@@ -65,7 +65,6 @@ class Navbar extends Component {
                  </Link>
                </li>
              </ul>
-
              {isAuthenticated ? authLinks: guestLinks}
            </div>
          </div>
@@ -83,4 +82,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, {logoutUser, clearCurrentProfile})(Navbar);
+export default connect(mapStateToProps, {logoutUser, clearCurrentProfile})(withRouter(Navbar));

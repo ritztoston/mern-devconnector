@@ -20,7 +20,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   const errors = {};
 
   Profile.findOne({user: req.user.id})
-     .populate('user', ['name', 'avatar'])
+     .populate('user', ['name', 'avatar', 'handle'])
      .then(profile => {
        if (!profile) {
          errors.noprofile = 'There is no profile for this user';
@@ -54,7 +54,7 @@ router.get('/user/:user_id', (req, res) => {
 router.get('/all', (req, res) => {
   const errors = {};
   Profile.find()
-     .populate('user', ['name', 'avatar'])
+     .populate('user', ['name', 'avatar', 'handle'])
      .then(profiles => {
        if (!profiles) {
          errors.noprofile = 'There is no profiles';
@@ -73,7 +73,7 @@ router.get('/handle/:handle', (req, res) => {
   const errors = {};
   User.findOne({handle: req.params.handle}).then(user => {
     Profile.findOne({user: user})
-  .populate('user', ['name', 'avatar', 'handle'])
+       .populate('user', ['name', 'avatar', 'handle'])
        .then(profile => {
          if (!profile) {
            errors.noprofile = 'There is no profile for this user';
@@ -99,9 +99,16 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   }
 
   // Get fields
+  // userFields
+  const userFields = {};
+  userFields.handle = req.body.handle;
+  userFields.name = req.body.name;
+  userFields.avatar = req.body.avatar;
+
+
+  // profileFields
   const profileFields = {};
   profileFields.user = req.user.id;
-  if (req.body.handle) profileFields.handle = req.body.handle;
   profileFields.company = req.body.company;
   profileFields.website = req.body.website;
   profileFields.location = req.body.location;
@@ -127,20 +134,30 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
             {$set: profileFields},
             {new: true}
             )
-            .then(profile => res.json(profile))
+             .then(profile => res.json(profile));
+
+         User.findOneAndUpdate(
+            {_id: req.user.id},
+            {$set: userFields},
+            {new: true}
+            ).then(user => res.json(user));
        }
        else {
          // Create
-         Profile.findOne({handle: profileFields.handle})
-            .then(profile => {
-              if (profile) {
-                errors.handle = 'That handle already exists';
-                return res.status(400).json(errors);
-              }
-
-              new Profile(profileFields).save()
-                 .then(profile => res.json(profile))
-            })
+         // User.findOne({handle: req.params.handle}).then(user => {
+         //   Profile.findOne({user: user})
+         //      .then(profile => {
+         //        if (profile) {
+         //          errors.handle = 'That handle already exists';
+         //          return res.status(400).json(errors);
+         //        }
+         //
+         //        new Profile(profileFields).save()
+         //           .then(profile => res.json(profile))
+         //      })
+         // })
+         new Profile(profileFields).save()
+            .then(profile => res.json(profile))
        }
      });
 });

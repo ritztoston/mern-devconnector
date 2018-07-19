@@ -7,6 +7,7 @@ import ProfileAbout from './ProfileAbout';
 import ProfileCreds from './ProfileCreds';
 import Spinner from '../common/Spinner';
 import {getProfileByHandle} from "../../actions/profileActions";
+import isEmpty from "../../validations/is-empty";
 
 
 class Profile extends Component {
@@ -26,7 +27,7 @@ class Profile extends Component {
     const {profile, loading} = this.props.profile;
     let profileContent;
 
-    if(profile === null || loading) {
+    if(profile === null || loading || isEmpty(profile)) {
       profileContent = <Spinner/>
     } else {
       profileContent = (

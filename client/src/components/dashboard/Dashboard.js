@@ -23,6 +23,7 @@ class Dashboard extends Component {
     const {user} = this.props.auth;
     const {profile, loading} = this.props.profile;
 
+
     let dashboardContent;
 
     if (profile === null || loading) {
@@ -32,10 +33,17 @@ class Dashboard extends Component {
       if (Object.keys(profile).length > 0) {
         dashboardContent = (
            <div>
-             <p className="lead text-muted">Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link></p>
+             <p className="lead text-muted">Welcome <Link to={`/profile/${profile.user.handle}`}>{user.name}</Link></p>
              <ProfileActions/>
-             <Experience experience={profile.experience} />
-             <Education education={profile.education} />
+             {Object.keys(profile.experience).length > 0 ? <Experience experience={profile.experience} /> :
+                <p style={{fontStyle:"italic"}}>
+                  No experience added. <Link to="/add-experience">Click here</Link> to add.
+                </p>}
+
+             {Object.keys(profile.education).length > 0 ? <Education education={profile.education} /> :
+                <p style={{fontStyle:"italic"}}>
+                  No education added. <Link to="/add-education">Click here</Link> to add.
+                </p>}
              <div style={{marginBottom: '60px'}}/>
              <button onClick={this.onDeleteClick.bind(this)} className="btn btn-danger">Delete My Account</button>
            </div>

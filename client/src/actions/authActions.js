@@ -1,4 +1,4 @@
-import {GET_ERRORS, LOGIN_LOADING, LOGIN_UNLOADING, SET_CURRENT_USER} from "./types";
+import {CLEAR_ERRORS, GET_ERRORS, LOGIN_LOADING, LOGIN_UNLOADING, SET_CURRENT_USER} from "./types";
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
@@ -20,8 +20,12 @@ export const registerUser = (userData, history) => dispatch => {
 };
 
 // Login Get user token
-export const loginUser = (userData) => dispatch => {
+export const loginUser = (userData, errors) => dispatch => {
   dispatch(setLoginLoading());
+
+  if(Object.keys(errors).length > 0) {
+    dispatch(clearErrors());
+  }
   axios.post('/api/users/login' ,userData)
      .then(res => {
        // Save to localStorage
@@ -36,6 +40,13 @@ export const loginUser = (userData) => dispatch => {
        dispatch(setCurrentUser(decoded))
      })
      .catch(err => dispatch(setLoginError(err)));
+};
+
+// Clear Errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  }
 };
 
 // Login loading
@@ -72,11 +83,12 @@ export const setCurrentUser = (decoded) => {
 };
 
 // Log user out
-export const logoutUser = () => dispatch => {
+export const logoutUser = (history) => dispatch => {
   // Remove token from ls
   localStorage.removeItem('jwtToken');
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to {}
   dispatch(setCurrentUser({}));
+  history.push('/login');
 };

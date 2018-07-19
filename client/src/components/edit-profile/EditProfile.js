@@ -19,6 +19,7 @@ class CreateProfile extends Component {
     this.state = {
       displaySocialInputs: false,
       handle: '',
+      name: '',
       company: '',
       website: '',
       location: '',
@@ -61,7 +62,8 @@ class CreateProfile extends Component {
 
       // Set component fields state
       this.setState({
-        handle: profile.handle,
+        handle: profile.user.handle,
+        name: profile.user.name,
         company: profile.company,
         website: profile.website,
         location: profile.location,
@@ -79,6 +81,8 @@ class CreateProfile extends Component {
 
     const profileData = {
       handle: this.state.handle,
+      name: this.state.name,
+      avatar: "//www.gravatar.com/avatar/adf10992770bc6c6484b9a5efa5106bc?s=200&r=pg&d=mm",
       company: this.state.company,
       website: this.state.website,
       location: this.state.location,
@@ -147,6 +151,14 @@ class CreateProfile extends Component {
                     error={errors.handle}
                     info="A unique handle for your profile URL. Your full name, company name,
                      nickname"
+                 />
+                 <TextFieldGroup
+                    placeholder="* Name"
+                    name="name"
+                    value={this.state.name}
+                    onChange={this.onChange}
+                    error={errors.name}
+                    info="How do your friends call you?"
                  />
                  <SelectListGroup
                     placeholder="Status"

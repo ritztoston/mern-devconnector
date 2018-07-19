@@ -34,13 +34,14 @@ class PostItem extends Component {
        <div className="card card-body mb-2">
          <div className="row">
            <div className="col-md-2">
+             {/*{isEmpty(post.user.handle) ? post.handle : post.user.handle}*/}
              <Link to={`/profile/${post.user.handle}`}>
                <img className="rounded-circle d-none d-md-block"
-                    src={post.avatar}
+                    src={post.user.avatar}
                     alt=""/>
              </Link>
              <br/>
-             <p className="text-center">{post.name}</p>
+             <p className="text-center">{post.user.name}</p>
            </div>
            <div className="col-md-10">
              <p className="lead">{post.text}</p>
@@ -49,12 +50,12 @@ class PostItem extends Component {
                <i className={classnames('fa fa-thumbs-up', {
                  'text-info': this.findUserLike(post.likes)
                })}/>
-               <span className="badge badge-light">{this.findUserLike(post.likes) ? (<span>Liked</span>) : (<span>Like</span>)} - {post.likes.length}</span>
+               <span className="badge badge-light">{post.likes.length > 0 ? post.likes.length : null}</span>
              </button>
              <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
                Comments
              </Link>
-               {post.user._id === auth.user.id ? (
+               {(post.user === auth.user.id) || (post.user._id === auth.user.id) ? (
                   <button onClick={this.onDeleteClick.bind(this, post._id)}
                           type="button"
                           className="btn btn-danger mr-1">

@@ -15,7 +15,7 @@ const validatePostInput = require('../../validations/post');
 // @access:  Public
 router.get('/', (req, res) => {
   Post.find()
-     .populate('user', ['handle', 'avatar'])
+     .populate('user', ['handle', 'avatar', 'name'])
      .sort({date: -1})
      .then(posts => res.json(posts))
      .catch(err => res.status(404).json({nopostfound: 'No posts found'}));
@@ -44,13 +44,16 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 
   const newPost = new Post({
     text: req.body.text,
-    name: req.user.name,
-    avatar: req.user.avatar,
     user: req.user.id
   });
 
-  newPost.save()
-     .then(post => res.json(post));
+  newPost
+     .save()
+     .then(post => {
+       Post.find(post)
+          .populate('user', ['handle', 'avatar', 'name'])
+          .then(posts => res.json(posts[0]))
+     });
 });
 
 

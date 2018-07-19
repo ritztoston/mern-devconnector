@@ -17,7 +17,6 @@ class CreateProfile extends Component {
     super(props);
     this.state = {
       displaySocialInputs: false,
-      handle: '',
       company: '',
       website: '',
       location: '',
@@ -43,7 +42,6 @@ class CreateProfile extends Component {
     e.preventDefault();
 
     const profileData = {
-      handle: this.state.handle,
       company: this.state.company,
       website: this.state.website,
       location: this.state.location,
@@ -104,15 +102,6 @@ class CreateProfile extends Component {
                <p className="lead text-center">Let's some information to make your profile stand out</p>
                <small className="d-block pb-3">* = required fields</small>
                <form onSubmit={this.onSubmit}>
-                 <TextFieldGroup
-                    placeholder="* Profile Handle"
-                    name="handle"
-                    value={this.state.handle}
-                    onChange={this.onChange}
-                    error={errors.handle}
-                    info="A unique handle for your profile URL. Your full name, company name,
-                     nickname"
-                 />
                  <SelectListGroup
                     placeholder="Status"
                     name="status"

@@ -5,7 +5,7 @@ import {
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
-  SET_CURRENT_USER
+  SET_CURRENT_USER, CLEAR_ERRORS
 } from "./types";
 // import {browserHistory} from 'react-router-dom';
 
@@ -48,8 +48,7 @@ export const getProfileByHandle = (handle) => dispatch => {
 // Clear errors
 export const clearErrors = () => dispatch => {
   dispatch({
-    type: GET_ERRORS,
-    payload: {}
+    type: CLEAR_ERRORS,
   });
 };
 
