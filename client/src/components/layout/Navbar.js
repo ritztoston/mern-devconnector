@@ -31,21 +31,25 @@ class Navbar extends Component {
     const authLinks = (
        <ul className="navbar-nav ml-auto">
          <li className="nav-item">
-           <Link className="nav-link" to="/feed">
-             Post Feed
-           </Link>
-         </li>
-         <li className="nav-item">
            <Link className="nav-link" to="/dashboard">
-             <img className="rounded-circle" src={user.avatar} alt={user.name} title="You must have a Gravatar connected to your email to display an image" style={{width: '25px', marginRight: '5px'}}/>
              {user.name}
            </Link>
          </li>
-         <li className="nav-item">
-           <a href="" className="nav-link" onClick={this.onLogoutLink.bind(this)}>
-             Logout
-           </a>
-
+         <li className="navitem">
+           <div className="dropdown">
+             <Link className="nav-link" to="/dashboard">
+               <img className="rounded-circle" src={user.avatar} alt={user.name} title="You must have a Gravatar connected to your email to display an image" style={{width: '25px', marginRight: '5px'}}/>
+             </Link>
+             <div className="dropdown-content">
+               <Link className="nav-link" to="/edit-profile" style={{color: "black", fontSize: "16px", textAlign: "right", margin: "0", border: "0"}}>
+                 Edit Profile
+               </Link>
+               <hr className="navbar-divider" style={{margin: "0"}}/>
+               <a href="" className="nav-link" onClick={this.onLogoutLink.bind(this)}  style={{color: "black", fontSize: "16px", textAlign: "right"}}>
+                 Logout
+               </a>
+             </div>
+           </div>
          </li>
        </ul>
     );
