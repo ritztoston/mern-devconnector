@@ -23,6 +23,8 @@ export const registerUser = (userData, history) => dispatch => {
 export const loginUser = (userData, errors) => dispatch => {
   dispatch(setLoginLoading());
 
+  // console.log(errors);
+
   if(Object.keys(errors).length > 0) {
     dispatch(clearErrors());
   }

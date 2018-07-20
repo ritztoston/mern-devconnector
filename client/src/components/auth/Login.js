@@ -26,7 +26,7 @@ class Login extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/feed');
     }
 
     if(nextProps.auth.loading) {
@@ -51,7 +51,7 @@ class Login extends Component {
       password: this.state.password,
     };
 
-    this.props.loginUser(userData, this.state.errors);
+    this.props.loginUser(userData, this.props.errors);
   };
 
   render () {

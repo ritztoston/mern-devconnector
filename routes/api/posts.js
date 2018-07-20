@@ -26,6 +26,8 @@ router.get('/', (req, res) => {
 // @access:  Public
 router.get('/:id', (req, res) => {
   Post.findById(req.params.id)
+     .populate('user', ['handle', 'avatar', 'name'])
+     .populate('comments.user', ['handle', 'avatar', 'name'])
      .then(post => res.json(post))
      .catch(err => res.status(404).json({nopostfound: 'No post found with that ID'}));
 });
@@ -143,18 +145,26 @@ router.post('/comment/:id', passport.authenticate('jwt', {session: false}), (req
   }
 
   Post.findById(req.params.id)
+     .populate('comments.user', ['handle', 'avatar', 'name'])
      .then(post => {
        const newComment = {
          text: req.body.text,
-         name: req.user.name,
-         avatar: req.user.avatar,
          user: req.user.id
        };
 
        // Add to comments array
-       post.comments.unshift(newComment);
+        post.comments.unshift(newComment);
 
-       post.save().then(post => res.json(post))
+       // post.save().then(post => res.json(post))
+
+       post
+          .save()
+          .then(post => {
+            Post.find(post)
+               .populate('user', ['handle', 'avatar', 'name'])
+               .populate('comments.user', ['handle', 'avatar', 'name'])
+               .then(post => res.json(post[0]))
+          });
      })
      .catch(err => res.status(404).json({postnotfound: 'No post found'}));
 });
@@ -166,10 +176,11 @@ router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', {session:
 
   Post.findById(req.params.id)
      .then(post => {
-       //Check for post owner
-       if (post.user.toString() !== req.user.id) {
-         return res.status(401).json({ notauthorized: 'User not authorized'});
-       }
+       // console.log(post);
+       // //Check for post owner
+       // if (post.user.toString() !== req.user.id) {
+       //   return res.status(401).json({ notauthorized: 'User not authorized'});
+       // }
 
        // Check to see if comment exist
        if (post.comments.filter(comment => comment.id.toString() === req.params.comment_id).length === 0) {
@@ -184,7 +195,14 @@ router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', {session:
        // Splice comment out of the array
        post.comments.splice(removeIndex, 1);
 
-       post.save().then(post => res.json(post));
+       post
+          .save()
+          .then(post => {
+            Post.find(post)
+               .populate('user', ['handle', 'avatar', 'name'])
+               .populate('comments.user', ['handle', 'avatar', 'name'])
+               .then(post => res.json(post[0]))
+          });
      })
      .catch(err => res.status(404).json({postnotfound: 'No post found'}));
 });
