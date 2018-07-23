@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 
 // import utility
 import setAuthToken from '../utils/setAuthToken';
+import isEmpty from "../validations/is-empty";
 
 // Register
 export const registerUser = (userData, history) => dispatch => {
@@ -86,11 +87,17 @@ export const setCurrentUser = (decoded) => {
 
 // Log user out
 export const logoutUser = (history) => dispatch => {
-  // Remove token from ls
-  localStorage.removeItem('jwtToken');
-  // Remove auth header for future requests
-  setAuthToken(false);
-  // Set current user to {}
-  dispatch(setCurrentUser({}));
-  history.push('/login');
+  if(isEmpty(history)) {
+    // Remove token from ls
+    localStorage.removeItem('jwtToken');
+    // Remove auth header for future requests
+    setAuthToken(false);
+    // Set current user to {}
+    dispatch(setCurrentUser({}));
+  } else {
+    localStorage.removeItem('jwtToken');
+    setAuthToken(false);
+    dispatch(setCurrentUser({}));
+    history.push('/login');
+  }
 };
